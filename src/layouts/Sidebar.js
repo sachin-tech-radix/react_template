@@ -61,7 +61,7 @@ const Sidebar = () => {
   let location = useLocation();
 
   return (
-    <div className="bg-dark">
+    <div className="bg-light-danger">
       <div className="d-flex">
         <Button
           color="white"
@@ -88,15 +88,6 @@ const Sidebar = () => {
               </Link>
             </NavItem>
           ))}
-          {/*<Button
-            color="danger"
-            tag="a"
-            target="_blank"
-            className="mt-3"
-            href="https://www.wrappixel.com/templates/adminpro-react-redux-admin/?ref=33"
-          >
-            Upgrade To Pro
-          </Button>*/}
         </Nav>
       </div>
     </div>

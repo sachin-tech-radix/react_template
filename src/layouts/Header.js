@@ -16,6 +16,8 @@ import {
 import Logo from "./Logo";
 import { ReactComponent as LogoWhite } from "../assets/images/logos/adminprowhite.svg";
 import user1 from "../assets/images/users/user4.jpg";
+import logo from "../assets/images/logos/logo.png";
+import logoMobile from "../assets/images/logos/mobile_logo.png";
 
 const Header = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -31,12 +33,13 @@ const Header = () => {
   };
   return (
     <Navbar color="white" light expand="md" className="fix-header">
+    {/* <Navbar color="#f8dddd" dark expand="md" className="fix-header" style={{backgroundColor:'#f8dddd'}}> */}
       <div className="d-flex align-items-center">
         <div className="d-lg-block d-none me-5 pe-3">
-          <Logo />
+          <img src={logo} width='156' height='35' alt="user" />
         </div>
         <NavbarBrand href="/">
-          <LogoWhite className="d-lg-none" />
+          <img src={logoMobile} width='35' height='35' alt="user" className="d-lg-none" />
         </NavbarBrand>
         <Button
           color="primary"
@@ -63,7 +66,7 @@ const Header = () => {
 
       <Collapse navbar isOpen={isOpen}>
         <Nav className="me-auto" navbar>
-          <NavItem>
+          {/* <NavItem>
             <Link to="/starter" className="nav-link">
               Starter
             </Link>
@@ -83,7 +86,7 @@ const Header = () => {
               <DropdownItem divider />
               <DropdownItem>Reset</DropdownItem>
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </UncontrolledDropdown> */}
         </Nav>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="transparent">

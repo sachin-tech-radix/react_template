@@ -13,7 +13,7 @@ const About = () => {
             About Admin Pro React
           </CardTitle>
           <CardBody className="p-4">
-            <Row justify-content>
+            <Row>
               <Col lg="8">
                 <h2 className="mt-4">Admin Pro React Admin Pro Version</h2>
                 <h5 className=" mb-4">
@@ -21,7 +21,7 @@ const About = () => {
                   the package, with React Router 6, Redux Toolkit, Axios nd much
                   more...
                 </h5>
-                <img
+                {/* <img
                   src="https://demos.wrappixel.com/free-admin-templates/angular/landingpage-styles/assets/images/screenshots/adminpro-react-pro-lp-img.jpg"
                   alt="my"
                 />
@@ -33,7 +33,7 @@ const About = () => {
                   target="_blank"
                 >
                   Check Pro Version
-                </Button>
+                </Button> */}
               </Col>
             </Row>
           </CardBody>
