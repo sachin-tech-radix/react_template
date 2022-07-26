@@ -1,5 +1,4 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Container } from "reactstrap";
 import { useEffect } from "react";
@@ -7,8 +6,8 @@ import { useEffect } from "react";
 const FullLayout = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    if(localStorage.getItem('token')===null){
-      navigate("/login");
+    if(localStorage.getItem('token')!==null){
+      navigate("/shops");
     }
   }, [])
   return (
@@ -16,10 +15,6 @@ const FullLayout = () => {
       {/********header**********/}
       <Header />
       <div className="pageWrapper d-lg-flex">
-        {/********Sidebar**********/}
-        <aside className="sidebarArea shadow bg-light-danger" id="sidebarArea">
-          <Sidebar />
-        </aside>
         {/********Content Area**********/}
         <div className="contentArea">
           {/********Middle Content**********/}

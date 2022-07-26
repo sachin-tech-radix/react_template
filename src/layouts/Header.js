@@ -1,16 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Navbar,
-  Collapse,
-  Nav,
-  NavItem,
   NavbarBrand,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Dropdown,
   Button,
 } from "reactstrap";
 import Logo from "./Logo";
@@ -24,7 +15,7 @@ const Header = () => {
 
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  //const toggle = () => setDropdownOpen((prevState) => !prevState);
   const Handletoggle = () => {
     setIsOpen(!isOpen);
   };
@@ -42,7 +33,7 @@ const Header = () => {
           <img src={logoMobile} width='35' height='35' alt="user" className="d-lg-none" />
         </NavbarBrand>
         <Button
-          color="primary"
+          color="light-danger"
           className=" d-lg-none"
           onClick={() => showMobilemenu()}
         >
@@ -51,7 +42,7 @@ const Header = () => {
       </div>
       <div className="hstack gap-2">
         <Button
-          color="primary"
+          color="light-danger"
           size="sm"
           className="d-sm-block d-md-none"
           onClick={Handletoggle}
@@ -64,30 +55,7 @@ const Header = () => {
         </Button>
       </div>
 
-      <Collapse navbar isOpen={isOpen}>
-        <Nav className="me-auto" navbar>
-          {/* <NavItem>
-            <Link to="/starter" className="nav-link">
-              Starter
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link to="/about" className="nav-link">
-              About
-            </Link>
-          </NavItem>
-          <UncontrolledDropdown inNavbar nav>
-            <DropdownToggle caret nav>
-              DD Menu
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Reset</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown> */}
-        </Nav>
+      {/* <Collapse navbar isOpen={isOpen}>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="transparent">
             <img
@@ -107,7 +75,7 @@ const Header = () => {
             <DropdownItem>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
-      </Collapse>
+      </Collapse> */}
     </Navbar>
   );
 };
