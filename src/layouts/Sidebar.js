@@ -5,6 +5,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const navigation = [
   {
+    title: "Dashboard",
+    href: "/dashboard",
+    icon: "bi bi-layout-split",
+  },
+  {
     title: "Shops",
     href: "/shops",
     icon: "bi bi-layout-split",

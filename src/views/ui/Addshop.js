@@ -1,12 +1,11 @@
 import {useState, useEffect} from 'react';
-import { BiRupee } from "react-icons/bi";
 import { Alert, Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { apiPath, config, amount } from "../../Constants";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const Addshop = () => {
-  let { shopid } = useParams();
+  //let { shopid } = useParams();
   let [loading, setLoading] = useState(false);
   let [addData, setAddData] = useState({'fname':'','email':'','phone':'','dob':'','tob':'','pob':'','amount':amount});
   let [nameerr, setNameerr] = useState("");
@@ -15,10 +14,10 @@ const Addshop = () => {
   let [doberr, setDobErr] = useState("");
   let [toberr, setTobErr] = useState("");
   let [poberr, setPobErr] = useState("");
-  let [pobcity, setpobcity] = useState([]);
-  let [amountErr, setAmountErr] = useState("");
+  //let [pobcity, setpobcity] = useState([]);
+  //let [amountErr, setAmountErr] = useState("");
   let [err, setErr] = useState('');
-  let [shop, setShop] = useState({name:null,id:null});
+  //let [shop, setShop] = useState({name:null,id:null});
 
   let changeName = (e) => {
     setAddData({...addData,[e.target.name]:e.target.value});

@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import { BiRupee } from "react-icons/bi";
 import { Alert, Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { apiPath, config, amount } from "../../Constants";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -20,7 +20,7 @@ const Forms = () => {
   let [doberr, setDobErr] = useState("");
   let [toberr, setTobErr] = useState("");
   let [poberr, setPobErr] = useState("");
-  let [pobcity, setpobcity] = useState([]);
+  //let [pobcity, setpobcity] = useState([]);
   let [amountErr, setAmountErr] = useState("");
   let [err, setErr] = useState('');
   let [shop, setShop] = useState({name:null,id:null});
@@ -209,7 +209,7 @@ const Forms = () => {
         {/* --------------------------------------------------------------------------------*/}
         {/* Card-1*/}
         {/* --------------------------------------------------------------------------------*/}
-        {(err != '')?<Alert color="danger">{err}</Alert>:
+        {(err != '')?<Alert color="success">{err}</Alert>:
         <Card>
           {
           (formStatus == 1)?

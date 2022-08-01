@@ -1,19 +1,19 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import Header from "./Header";
 import { Container } from "reactstrap";
 import { useEffect } from "react";
+import HeaderOpen from "./HeaderOpen";
 
 const FullLayout = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if(localStorage.getItem('token')!==null){
-      navigate("/shops");
+      navigate("/dashboard");
     }
   }, [])
   return (
     <main>
       {/********header**********/}
-      <Header />
+      <HeaderOpen />
       <div className="pageWrapper d-lg-flex">
         {/********Content Area**********/}
         <div className="contentArea">

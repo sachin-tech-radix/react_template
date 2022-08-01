@@ -28,11 +28,11 @@ const Shops = () => {
   },[])
   let changeOffermaking = (e) => {
     setAddData({...addData,[e.target.name]:e.target.value});
-    if(e.target.value>100  || e.target.value<0  || e.target.value==''){setMakingerr('Offer on making should remain 0 to 100');}else{setMakingerr('');}
+    //if(e.target.value>100  || e.target.value<0  || e.target.value==''){setMakingerr('Offer on making should remain 0 to 100');}else{setMakingerr('');}
   }
   let changeOfferstone = (e) => {
     setAddData({...addData,[e.target.name]:e.target.value});
-    if(e.target.value>100 || e.target.value<0 || e.target.value==''){setStoneerr('Offer on making should remain 0 to 100');}else{setStoneerr('');}
+    //if(e.target.value>100 || e.target.value<0 || e.target.value==''){setStoneerr('Offer on making should remain 0 to 100');}else{setStoneerr('');}
   }
   let changeName = (e) => {
     setAddData({...addData,[e.target.name]:e.target.value});
@@ -57,8 +57,8 @@ const Shops = () => {
     if(addData.name.trim()===''){error=1;setNameerr('Full Name is required');}else{setNameerr('');}
     if(addData.address.trim()===''){error=1;setAddresserr('Address is required');}else{setAddresserr('');}
     if((addData.phone === '') || (addData.phone.length !== 10)){error=1;setPhoneerr('Phone is required/invalid');}else{setPhoneerr('');}
-    if(addData.offermaking>100  || addData.offermaking<0 || addData.offermaking==null){error=1;setMakingerr('Offer on making should remain 0 to 100');}else{setMakingerr('');}
-    if(addData.offerstone>100 || addData.offerstone<0 || addData.offerstone==null){error=1;setStoneerr('Offer on making should remain 0 to 100');}else{setStoneerr('');}
+    //if(addData.offermaking>100  || addData.offermaking<0 || addData.offermaking==null){error=1;setMakingerr('Offer on making should remain 0 to 100');}else{setMakingerr('');}
+    //if(addData.offerstone>100 || addData.offerstone<0 || addData.offerstone==null){error=1;setStoneerr('Offer on making should remain 0 to 100');}else{setStoneerr('');}
     if(error == 0){
       //setAddData({...addData,public_id:e.target.value});
       let shop = {
@@ -90,8 +90,8 @@ const Shops = () => {
     if(e.target[1].value.trim()===''){error=1;setNameerr('Full Name is required');}else{setNameerr('');}
     if(e.target[2].value.trim()===''){error=1;setAddresserr('Address is required');}else{setAddresserr('');}
     if((e.target[3].value === '') || (e.target[3].value.length !== 10)){error=1;setPhoneerr('Phone is required/invalid');}else{setPhoneerr('');}
-    if(e.target[4].value>100  || e.target[4].value<0 || e.target[4].value==''){error=1;setMakingerr('Offer on making not more than 100%');}else{setMakingerr('');}
-    if(e.target[5].value>100  || e.target[5].value<0 || e.target[5].value==''){error=1;setStoneerr('Offer on stone not more than 100%');}else{setStoneerr('');}
+    //if(e.target[4].value>100  || e.target[4].value<0 || e.target[4].value==''){error=1;setMakingerr('Offer on making not more than 100%');}else{setMakingerr('');}
+    //if(e.target[5].value>100  || e.target[5].value<0 || e.target[5].value==''){error=1;setStoneerr('Offer on stone not more than 100%');}else{setStoneerr('');}
     if(error == 0){
       //setAddData({...addData,public_id:e.target.value});
       let shop = {
@@ -160,10 +160,29 @@ const Shops = () => {
       //setShops([]);
     });
   }
+  let unduPayment = (shop_data) => {
+    let url = `${apiPath}undupayment/${shop_data.public_id}`;
+    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+    axios.patch(url, shop_data, config).then((res)=>{
+      setErr('Payment done');
+      let newArray = shops.slice();
+      newArray.find((o, i) => {
+          if (o.public_id == shop_data.public_id) {
+            newArray[i] = { payment_date:res.data.result.payment_date ,offer_making: shop_data.offer_making,offer_jwellary: shop_data.offer_jwellary,phone: shop_data.phone, name: shop_data.name,address: shop_data.address,public_id:shop_data.public_id };
+            return true; // stop searching
+          }
+      });
+      setShops(newArray);
+    }).catch((err)=>{
+      setErr(err.response.data.message);
+      //setShops([]);
+    });
+  }
   let correctdate= (tdate) => {
     let odate = [new Date(tdate).getDate(),new Date(tdate).getMonth() + 1,  new Date(tdate).getFullYear()].join('/');
     return odate;
   }
+  let todaydate = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate();
   return (
     <Row>
       <Modal show={generateQR === "qr"} backdrop="static" keyboard={false} >
@@ -196,10 +215,10 @@ const Shops = () => {
             <Input defaultValue={shop.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small>
             </FormGroup>
             <FormGroup>
-            <Input defaultValue={shop.offer_making} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small>
+            <Input defaultValue={0} disabled={true} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small>
             </FormGroup>
             <FormGroup>
-            <Input defaultValue={shop.offer_jwellary} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small>
+            <Input defaultValue={0}  disabled={true} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small>
             </FormGroup>
             <Button className="btn" color="light-danger" type="submit">Update</Button>
             <Button className="btn m-2" color="danger" onClick={()=>{setShow(false)}}>Close</Button>
@@ -219,21 +238,21 @@ const Shops = () => {
               <input type="hidden" name="public_id" defaultValue={0} />
               <Row className='p-4'>
                 <Col>
-                  <div><Input defaultValue={addData.name} name="name" placeholder="Shop Name" type="text" onChange={changeName} /><small className="text-danger">{nameerr}</small></div>
+                  <div><Input  value={addData.name} name="name" placeholder="Shop Name" type="text" onChange={changeName} /><small className="text-danger">{nameerr}</small></div>
                 </Col>
                 <Col>
-                  <div><Input defaultValue={addData.address} name="address" placeholder="Shop Address" type="text" onChange={changeAddress} /><small className="text-danger">{addresserr}</small></div>
+                  <div><Input value={addData.address} name="address" placeholder="Shop Address" type="text" onChange={changeAddress} /><small className="text-danger">{addresserr}</small></div>
                 </Col>
                 <Col>
-                  <div><Input defaultValue={addData.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small></div>
+                  <div><Input value={addData.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small></div>
                 </Col>
               </Row>
               <Row className='p-4'>
                 <Col>
-                  <div><Input defaultValue={addData.offermaking} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small></div>
+                  <div><Input value={0} disabled={true} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small></div>
                 </Col>
                 <Col>
-                  <div><Input defaultValue={addData.offerstone} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small></div>
+                  <div><Input value={0} disabled={true} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small></div>
                 </Col>
                 <Col>
                   <div><Input checked={addData.payment} name="payment" defaultValue="1" type="checkbox" onClick={changePayment} /> <Label check>Payment</Label>&nbsp;&nbsp;<Button className="btn" color="light-danger" type="submit">Add</Button></div>
@@ -260,10 +279,11 @@ const Shops = () => {
                   <th>Name</th>
                   <th>Address</th>
                   <th>Phone</th>
-                  <th>Offer On Making</th>
-                  <th>Offer On Stone</th>
+                  {/* <th>Offer On Making</th>
+                  <th>Offer On Stone</th> */}
                   <th>Payment Date</th>
                   <th>Add Payment</th>
+                  <th>Undo Payment</th>
                   <th>QR</th>
                   <th>Edit</th>
                 </tr>
@@ -277,10 +297,11 @@ const Shops = () => {
                       <th>{shop.name}</th>
                       <th>{shop.address}</th>
                       <th>{shop.phone}</th>
-                      <th>{shop.offer_making}</th>
-                      <th>{shop.offer_jwellary}</th>
+                      {/* <th>{shop.offer_making}</th>
+                      <th>{shop.offer_jwellary}</th> */}
                       <th>{correctdate(shop.payment_date)}</th>
-                      <th><Button className="btn" color="light-danger" onClick={() => addPayment(shop)}>Payment</Button></th>
+                      <th><Button className="btn" color="light-danger" onClick={() => addPayment(shop)}>Add Payment</Button></th>
+                      <th>{new Date(shop.payment_date) >= new Date(todaydate)?<Button className="btn" color="light-danger" onClick={() => unduPayment(shop)}>Undo Payment</Button>:null}</th>
                       <th><Button className="btn" color="light-danger" onClick={() => generateQRCode(shop)}>Genrate</Button></th>
                       <th><Button className="btn" color="light-danger" onClick={() => onEdit(shop)}>Edit</Button></th>
                     </tr>

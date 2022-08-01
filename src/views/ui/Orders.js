@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import { Form, Input, Alert, Button, Row, Col, Table, Card, CardTitle, CardBody, FormGroup, Label, } from "reactstrap";
+import {  Alert, Row, Col, Table, Card, CardTitle, CardBody } from "reactstrap";
 import { apiPath, config } from "../../Constants";
 import axios from 'axios';
 
@@ -54,7 +54,7 @@ const Orders = () => {
                       <td>{index+1}</td>
                       <td>{order.public_id}</td>
                       <td>{correctdate(order.created_at)}</td>
-                      <td>{order.status}</td>
+                      <td>Completed</td>
                       <td>{order.username}</td>
                       <td>{order.userphone}</td>
                       <td>{correctdate(order.dob)}</td>

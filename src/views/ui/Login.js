@@ -1,4 +1,4 @@
-import { Alert, Row, Col, Table, Card, CardTitle, CardBody, Button, Form ,FormGroup ,Label ,Input ,FormText, Nav, NavItem } from "reactstrap";
+import { Alert, Row, Col, Card, CardTitle, CardBody, Button, Form ,FormGroup ,Label } from "reactstrap";
 import { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { apiPath, config } from "../../Constants";
@@ -27,16 +27,18 @@ const Login = () => {
         username : loginData.username,
         password : loginData.password
       };
-      let url = `${apiPath}login/`;
+      let url = `${apiPath}login`;
       axios.post(url, user, config).then((res)=>{
         localStorage.setItem('name', res.data.result.name);
         localStorage.setItem('token', res.data.access_token);
-        navigate("/shops");
-      }).catch((err)=>{
+        navigate("/dashboard");
+      }).catch((err)=>{console.log(err);
         setError(err.response.data.message);
+        setLoading(false);
       });
+    }else{
+      setLoading(false);
     }
-    setLoading(false);
   }
   let inputValue = (e) => {
     if(e.target.name === 'username'){
