@@ -1,25 +1,25 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import PlanSidebar from "./PlanSidebar";
+import Header from "./Header";
 import { Container } from "reactstrap";
 import { useEffect } from "react";
-import HeaderOpen from "./HeaderOpen";
 
 const FullLayout = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    if(localStorage.getItem('token')!==null){
-      navigate("/dashboard");
+    if(localStorage.getItem('token')===null){
+      navigate("/login");
     }
-    // if(localStorage.getItem('type') == 1){
-    //   navigate("/dashboard");
-    // }else{
-    //   navigate("/plandashboard");
-    // }
   }, [])
   return (
     <main>
       {/********header**********/}
-      <HeaderOpen />
+      <Header />
       <div className="pageWrapper d-lg-flex">
+        {/********Sidebar**********/}
+        <aside className="sidebarArea shadow bg-light-danger" id="sidebarArea">
+          <PlanSidebar />
+        </aside>
         {/********Content Area**********/}
         <div className="contentArea">
           {/********Middle Content**********/}

@@ -28,11 +28,15 @@ const Login = () => {
         password : loginData.password
       };
       let url = `${apiPath}login`;
-      axios.post(url, user, config).then((res)=>{
-        localStorage.setItem('name', res.data.result.name);
+      axios.post(url, user, config).then((res)=>{//console.log(res);
+        localStorage.setItem('type', res.data.result.type);
         localStorage.setItem('token', res.data.access_token);
-        navigate("/dashboard");
-      }).catch((err)=>{console.log(err);
+        if(res.data.result.type == 1){
+          navigate("/dashboard");
+        }else{
+          navigate("/plandashboard");
+        }
+      }).catch((err)=>{//console.log(err);
         setError(err.response.data.message);
         setLoading(false);
       });
