@@ -143,40 +143,50 @@ const Shops = () => {
     });
   }
   let addPayment = (shop_data) => {
-    let url = `${apiPath}addpayment/${shop_data.public_id}`;
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    axios.patch(url, shop_data, config).then((res)=>{
-      setErr('Payment done');
-      let newArray = shops.slice();
-      newArray.find((o, i) => {
-          if (o.public_id == shop_data.public_id) {
-            newArray[i] = { payment_date:res.data.result.payment_date ,offer_making: shop_data.offer_making,offer_jwellary: shop_data.offer_jwellary,phone: shop_data.phone, name: shop_data.name,address: shop_data.address,public_id:shop_data.public_id };
-            return true; // stop searching
-          }
+    const confirmBox = window.confirm(
+      "Do you really want to make a payment?"
+    )
+    if (confirmBox === true) {
+      let url = `${apiPath}addpayment/${shop_data.public_id}`;
+      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+      axios.patch(url, shop_data, config).then((res)=>{
+        setErr('Payment done');
+        let newArray = shops.slice();
+        newArray.find((o, i) => {
+            if (o.public_id == shop_data.public_id) {
+              newArray[i] = { payment_date:res.data.result.payment_date ,offer_making: shop_data.offer_making,offer_jwellary: shop_data.offer_jwellary,phone: shop_data.phone, name: shop_data.name,address: shop_data.address,public_id:shop_data.public_id };
+              return true; // stop searching
+            }
+        });
+        setShops(newArray);
+      }).catch((err)=>{
+        setErr(err.response.data.message);
+        //setShops([]);
       });
-      setShops(newArray);
-    }).catch((err)=>{
-      setErr(err.response.data.message);
-      //setShops([]);
-    });
+    }
   }
   let unduPayment = (shop_data) => {
-    let url = `${apiPath}undupayment/${shop_data.public_id}`;
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    axios.patch(url, shop_data, config).then((res)=>{
-      setErr('Payment done');
-      let newArray = shops.slice();
-      newArray.find((o, i) => {
-          if (o.public_id == shop_data.public_id) {
-            newArray[i] = { payment_date:res.data.result.payment_date ,offer_making: shop_data.offer_making,offer_jwellary: shop_data.offer_jwellary,phone: shop_data.phone, name: shop_data.name,address: shop_data.address,public_id:shop_data.public_id };
-            return true; // stop searching
-          }
+    const confirmBox = window.confirm(
+      "Do you really want to remove a payment?"
+    )
+    if (confirmBox === true) {
+      let url = `${apiPath}undupayment/${shop_data.public_id}`;
+      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+      axios.patch(url, shop_data, config).then((res)=>{
+        setErr('Payment done');
+        let newArray = shops.slice();
+        newArray.find((o, i) => {
+            if (o.public_id == shop_data.public_id) {
+              newArray[i] = { payment_date:res.data.result.payment_date ,offer_making: shop_data.offer_making,offer_jwellary: shop_data.offer_jwellary,phone: shop_data.phone, name: shop_data.name,address: shop_data.address,public_id:shop_data.public_id };
+              return true; // stop searching
+            }
+        });
+        setShops(newArray);
+      }).catch((err)=>{
+        setErr(err.response.data.message);
+        //setShops([]);
       });
-      setShops(newArray);
-    }).catch((err)=>{
-      setErr(err.response.data.message);
-      //setShops([]);
-    });
+    }
   }
   let correctdate= (tdate) => {
     let odate = [new Date(tdate).getDate(),new Date(tdate).getMonth() + 1,  new Date(tdate).getFullYear()].join('/');
@@ -214,12 +224,12 @@ const Shops = () => {
             <FormGroup>
             <Input defaultValue={shop.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small>
             </FormGroup>
-            <FormGroup>
+            {/* <FormGroup>
             <Input defaultValue={0} disabled={true} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small>
             </FormGroup>
             <FormGroup>
             <Input defaultValue={0}  disabled={true} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small>
-            </FormGroup>
+            </FormGroup> */}
             <Button className="btn" color="light-danger" type="submit">Update</Button>
             <Button className="btn m-2" color="danger" onClick={()=>{setShow(false)}}>Close</Button>
           </Form>
@@ -243,16 +253,16 @@ const Shops = () => {
                 <Col>
                   <div><Input value={addData.address} name="address" placeholder="Shop Address" type="text" onChange={changeAddress} /><small className="text-danger">{addresserr}</small></div>
                 </Col>
-                <Col>
-                  <div><Input value={addData.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small></div>
-                </Col>
               </Row>
               <Row className='p-4'>
-                <Col>
+                {/* <Col>
                   <div><Input value={0} disabled={true} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small></div>
                 </Col>
                 <Col>
                   <div><Input value={0} disabled={true} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small></div>
+                </Col> */}
+                <Col>
+                  <div><Input value={addData.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small></div>
                 </Col>
                 <Col>
                   <div><Input checked={addData.payment} name="payment" defaultValue="1" type="checkbox" onClick={changePayment} /> <Label check>Payment</Label>&nbsp;&nbsp;<Button className="btn" color="light-danger" type="submit">Add</Button></div>
@@ -265,7 +275,7 @@ const Shops = () => {
                   <Input onChange={changeList} name="country" type="select">
                       <option value='0'>All</option>
                       <option value='1'>Active</option>
-                      <option value='2'>Inactive after one month</option>
+                      <option value='2'>last month of subscription</option>
                       <option value='3'>Inactive</option>
                   </Input>
                 </FormGroup>
@@ -281,7 +291,7 @@ const Shops = () => {
                   <th>Phone</th>
                   {/* <th>Offer On Making</th>
                   <th>Offer On Stone</th> */}
-                  <th>Payment Date</th>
+                  <th>subcripion end date</th>
                   <th>Add Payment</th>
                   <th>Undo Payment</th>
                   <th>QR</th>

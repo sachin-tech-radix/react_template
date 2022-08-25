@@ -7,12 +7,12 @@ const navigation = [
   {
     title: "Dashboard",
     href: "/dashboard",
-    icon: "bi bi-layout-split",
+    icon: "bi bi-speedometer2",
   },
   {
     title: "Shops",
     href: "/shops",
-    icon: "bi bi-layout-split",
+    icon: "bi bi-textarea-resize",
   },
   // {
   //   title: "Discount",
@@ -52,7 +52,7 @@ const Sidebar = () => {
           className="ms-auto text-white d-lg-none"
           onClick={() => showMobilemenu()}
         >
-          <i className="bi bi-x"></i>
+          <i className="bi bi-x" style={{color: 'black'}}></i>
         </Button>
       </div>
       <div className="p-3 mt-2">
@@ -73,7 +73,7 @@ const Sidebar = () => {
             </NavItem>
           ))}
         </Nav>
-        &nbsp;&nbsp;&nbsp;&nbsp;<i className='bi bi-layout-split'></i><Button className="btn" color="light-danger" onClick={() => logout()}>Logout</Button>
+        &nbsp;&nbsp;&nbsp;&nbsp;<i className='bi bi-hdd-stack'></i><Button className="btn" color="light-danger" onClick={() => logout()}>Logout</Button>
       </div>
     </div>
   );

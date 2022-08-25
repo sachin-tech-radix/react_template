@@ -31,17 +31,6 @@ const Header = () => {
         </NavbarBrand>
         <Button color="light-danger" className=" d-lg-none" onClick={() => showMobilemenu()}><i className="bi bi-list"></i></Button>
       </div>
-      <div className="hstack gap-2">
-        <Button
-          color="light-danger" size="sm" className="d-sm-block d-md-none" onClick={Handletoggle}>
-          {isOpen ? (
-            <i className="bi bi-x"></i>
-          ) : (
-            <i className="bi bi-three-dots-vertical"></i>
-          )}
-        </Button>
-      </div>
-
       {/* <Collapse navbar isOpen={isOpen}>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="transparent">
