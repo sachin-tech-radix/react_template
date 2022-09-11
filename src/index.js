@@ -3,14 +3,14 @@ import ReactDOM from "react-dom";
 import "./assets/scss/style.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { HashRouter } from "react-router-dom";
+import { HashRouter, BrowserRouter } from "react-router-dom";
 import Loader from "./layouts/loader/Loader";
 
 ReactDOM.render(
   <Suspense fallback={<Loader />}>
-    <HashRouter>
+    <BrowserRouter>
       <App />
-    </HashRouter>
+    </BrowserRouter>
   </Suspense>,
 
   document.getElementById("root")

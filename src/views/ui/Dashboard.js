@@ -20,8 +20,8 @@ const Dashboard = () => {
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     axios.get(url, config).then((res)=>{
       setOrders(res.data.results);
-    }).catch((err)=>{console.log(err);
-      setOrders(err.response.data.results);
+    }).catch((err)=>{
+      //setOrders(err.response.data.results);
     });
   },[])
   return (

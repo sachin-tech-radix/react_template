@@ -4,6 +4,8 @@ import { apiPath, config } from "../../Constants";
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import QrCode from "./QrCode";
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 const Shops = () => {
   const [show, setShow] = useState(false);
@@ -23,7 +25,10 @@ const Shops = () => {
     axios.get(url, config).then((res)=>{
       setShops(res.data.results);
     }).catch((err)=>{
-      setErr(err.response.data.message);
+      // toast.error(err.response.data.message, {
+      //   position: toast.POSITION.TOP_RIGHT,
+      //   autoClose: 3000,
+      // });
     });
   },[])
   let changeOffermaking = (e) => {
@@ -73,14 +78,20 @@ const Shops = () => {
       let url = `${apiPath}addshop`;
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
       axios.post(url, shop, config).then((res)=>{
-        setErr(res.data.message);
+        toast.success(res.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
         setAddData({name:'',address:'',phone:'',offermaking:'',offerstone:''});
         let oldArray = shops;
         oldArray.unshift(res.data.results[0]);
         setShops([]);
         setShops(oldArray);
       }).catch((err)=>{
-        setErr(err.response.data.message);
+        toast.error(err.response.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
       });
     }
   }
@@ -106,7 +117,10 @@ const Shops = () => {
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
       axios.post(url, shop, config).then((res)=>{
         setAddData({name:'',address:'',phone:'',offermaking:'',offerstone:''});
-        setErr(res.data.message);
+        toast.success(res.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
         //Automatic Update Row
         let newArray = shops.slice();
         let obj = newArray.find((o, i) => {
@@ -119,7 +133,10 @@ const Shops = () => {
         setShow(false);
         //Automatic Update Row
       }).catch((err)=>{
-        setErr(err.response.data.message);
+        toast.error(err.response.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
       });
     }
   }
@@ -138,7 +155,10 @@ const Shops = () => {
       setErr('');
       setShops(res.data.results);
     }).catch((err)=>{
-      setErr(err.response.data.message);
+      toast.error(err.response.data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
       setShops([]);
     });
   }
@@ -150,7 +170,10 @@ const Shops = () => {
       let url = `${apiPath}addpayment/${shop_data.public_id}`;
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
       axios.patch(url, shop_data, config).then((res)=>{
-        setErr('Payment done');
+        toast.success("Payment done", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
         let newArray = shops.slice();
         newArray.find((o, i) => {
             if (o.public_id == shop_data.public_id) {
@@ -160,7 +183,10 @@ const Shops = () => {
         });
         setShops(newArray);
       }).catch((err)=>{
-        setErr(err.response.data.message);
+        toast.error(err.response.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
         //setShops([]);
       });
     }
@@ -173,7 +199,10 @@ const Shops = () => {
       let url = `${apiPath}undupayment/${shop_data.public_id}`;
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
       axios.patch(url, shop_data, config).then((res)=>{
-        setErr('Payment done');
+        toast.success("Payment done", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
         let newArray = shops.slice();
         newArray.find((o, i) => {
             if (o.public_id == shop_data.public_id) {
@@ -183,7 +212,10 @@ const Shops = () => {
         });
         setShops(newArray);
       }).catch((err)=>{
-        setErr(err.response.data.message);
+        toast.error(err.response.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
         //setShops([]);
       });
     }
@@ -299,7 +331,10 @@ const Shops = () => {
                 </tr>
               </thead>
               <tbody>
-              {
+              {shops.length === 0?
+                <tr>
+                      <td colSpan={9}>No shop found.</td>
+                </tr>:
                 shops.map((shop,index) => {
                   return (
                     <tr key={index}>
@@ -323,6 +358,7 @@ const Shops = () => {
           </CardBody>
         </Card>
       </Col>
+      <ToastContainer />
     </Row>
   );
 };

@@ -28,12 +28,11 @@ const Orders = () => {
             Order List
           </CardTitle>
           <CardBody className="">
-            {(err != '')?<Alert color="danger">{err}</Alert>:null}
             <Table bordered responsive>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Orderid</th>
+                  <th>Order Id</th>
                   <th>Date</th>
                   <th>Status</th>
                   <th>Name</th>
@@ -47,7 +46,10 @@ const Orders = () => {
                 </tr>
               </thead>
               <tbody>
-              {
+              {orders.length === 0?
+                <tr>
+                      <td colSpan={12}>No Order found.</td>
+                </tr>:
                 orders.map((order,index) => {
                   return (
                     <tr key={index}>

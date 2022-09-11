@@ -1,236 +1,263 @@
 import {useState, useEffect} from 'react';
 import { Form, Input, Alert, Button, Row, Col, Table, Card, CardTitle, CardBody, FormGroup, Label, } from "reactstrap";
 import { apiPath, config } from "../../Constants";
+import UserView from "./UserView";
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
-import QrCode from "./QrCode";
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
-const Shops = () => {
-  const [show, setShow] = useState(false);
+const Users = () => {
+  let [search, setSearch] = useState(null);
+  let [publicId, setPublicId] = useState(null);
+  let [view, setView] = useState(false);
+  let [show, setShow] = useState(false);
   let [err, setErr] = useState('');
-  let [shops, setShops] = useState([]);
-  let [shop, setShop] = useState({});
-  let [addData, setAddData] = useState({name:'',address:'',phone:'',payment:null,offermaking:null,offerstone:null});
-  let [nameerr, setNameerr] = useState("");
-  let [phoneerr, setPhoneerr] = useState("");
-  let [makingerr, setMakingerr] = useState("");
-  let [stoneerr, setStoneerr] = useState("");
-  let [addresserr, setAddresserr] = useState("");
-  let [generateQR, setGenerateQR] = useState("");
+  let [users, setUsers] = useState([]);
+  let [user, setUser] = useState({});
+  let [plans, setPlans] = useState([]);
+  let [addData, setAddData] = useState({
+    public_id:0,
+    name:'',nameerr:'',
+    address:'',addresserr:'',
+    email:'',emailerr:'',
+    phone:'',phoneerr:'',
+    city:'',cityerr:'',
+    state:'',stateerr:'',
+    country:'',countryerr:'',
+    referby:'',referbyerr:'',
+    plan_id:'',planerr:'',planname:'',});
+    useEffect(()=>{
+      let url = `${apiPath}users`;
+      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+      axios.get(url, config).then((res)=>{
+        setUsers(res.data.results);
+      }).catch((err)=>{
+        toast.error(err.response.data.message, {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
+      });
+    },[])
   useEffect(()=>{
-    let url = `${apiPath}shops/0`;
+    let url = `${apiPath}plans`;
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     axios.get(url, config).then((res)=>{
-      setShops(res.data.results);
+      setPlans(res.data.results);
     }).catch((err)=>{
-      setErr(err.response.data.message);
+      toast.error(err.response.data.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
     });
   },[])
-  let changeOffermaking = (e) => {
-    setAddData({...addData,[e.target.name]:e.target.value});
-    //if(e.target.value>100  || e.target.value<0  || e.target.value==''){setMakingerr('Offer on making should remain 0 to 100');}else{setMakingerr('');}
-  }
-  let changeOfferstone = (e) => {
-    setAddData({...addData,[e.target.name]:e.target.value});
-    //if(e.target.value>100 || e.target.value<0 || e.target.value==''){setStoneerr('Offer on making should remain 0 to 100');}else{setStoneerr('');}
-  }
-  let changeName = (e) => {
-    setAddData({...addData,[e.target.name]:e.target.value});
-    if(e.target.value.trim()===''){setNameerr('Full Name is required');}else{setNameerr('');}
-  }
-  let changeAddress = (e) => {
-    setAddData({...addData,[e.target.name]:e.target.value});
-    if(e.target.value.trim()===''){setAddresserr('Address is required');}else{setAddresserr('');}
-  }
-  let changePhone = (e) => {
-    setAddData({...addData,[e.target.name]:e.target.value});
-    if(e.target.value.trim()==='' || e.target.value.length > 10 || isNaN(e.target.value)){
-      setPhoneerr('Phone number is required/invalid');
-    }else{setPhoneerr('');}
-  }
-  let changePayment = (e) => {
-    (e.target.checked)?setAddData({...addData,[e.target.name]:1}):setAddData({...addData,[e.target.name]:0})
-  }
-  let save = (e) => {
-    e.preventDefault();
-    let error = 0;
-    if(addData.name.trim()===''){error=1;setNameerr('Full Name is required');}else{setNameerr('');}
-    if(addData.address.trim()===''){error=1;setAddresserr('Address is required');}else{setAddresserr('');}
-    if((addData.phone === '') || (addData.phone.length !== 10)){error=1;setPhoneerr('Phone is required/invalid');}else{setPhoneerr('');}
-    //if(addData.offermaking>100  || addData.offermaking<0 || addData.offermaking==null){error=1;setMakingerr('Offer on making should remain 0 to 100');}else{setMakingerr('');}
-    //if(addData.offerstone>100 || addData.offerstone<0 || addData.offerstone==null){error=1;setStoneerr('Offer on making should remain 0 to 100');}else{setStoneerr('');}
-    if(error == 0){
-      //setAddData({...addData,public_id:e.target.value});
-      let shop = {
-        name : addData.name,
+  const addUser = (event) => {
+    event.preventDefault();
+    let error = {status:0,name:'',address:'',email:'',phone:'',city:'',state:'',country:'',plan:''};
+    if(addData.name == ''){error.name = 'Name is required.';error.status=1}else{error.name = ''}
+    if(addData.phone<=0 || addData.phone == ''){error.phone = 'Please enter phone number.';error.status=1}else{error.phone = ''}
+    if(addData.email<=0 || addData.email == ''){error.email = 'Please enter email.';error.status=1}else{error.email = ''}
+    if(addData.address<=0 || addData.address == ''){error.address = 'Please enter address.';error.status=1}else{error.address = ''}
+    if(addData.city<=0 || addData.city == ''){error.city = 'Please enter city.';error.status=1}else{error.city = ''}
+    if(addData.state<=0 || addData.state == ''){error.state = 'Please enter state.';error.status=1}else{error.state = ''}
+    if(addData.country<=0 || addData.country == ''){error.country = 'Please enter country.';error.status=1}else{error.country = ''}
+    if(addData.plan_id<=0  || addData.plan_id == ''){error.plan = 'Please select plan.';error.status=1}else{error.plan = ''}
+    setAddData({...addData,nameerr:error.name,phoneerr:error.phone,emailerr:error.email,addresserr:error.address,cityerr:error.city,stateerr:error.state,countryerr:error.country,planerr:error.plan});
+    if(error.status == 0){
+      let url = '';
+      let user = {
+        fullname : addData.name,
         address : addData.address,
-        public_id : 0,
+        email : addData.email,
         phone : addData.phone,
-        payment : addData.payment,
-        offermaking : addData.offermaking,
-        offerstone : addData.offerstone
+        city : addData.city,
+        state : addData.state,
+        country : addData.country,
+        plan_id : addData.plan_id
       };
-      let url = `${apiPath}addshop`;
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-      axios.post(url, shop, config).then((res)=>{
-        setErr(res.data.message);
-        setAddData({name:'',address:'',phone:'',offermaking:'',offerstone:''});
-        let oldArray = shops;
-        oldArray.unshift(res.data.results[0]);
-        setShops([]);
-        setShops(oldArray);
-      }).catch((err)=>{
-        setErr(err.response.data.message);
-      });
-    }
-  }
-  let editsave = (e) => {
-    e.preventDefault();
-    let error = 0;
-    if(e.target[1].value.trim()===''){error=1;setNameerr('Full Name is required');}else{setNameerr('');}
-    if(e.target[2].value.trim()===''){error=1;setAddresserr('Address is required');}else{setAddresserr('');}
-    if((e.target[3].value === '') || (e.target[3].value.length !== 10)){error=1;setPhoneerr('Phone is required/invalid');}else{setPhoneerr('');}
-    //if(e.target[4].value>100  || e.target[4].value<0 || e.target[4].value==''){error=1;setMakingerr('Offer on making not more than 100%');}else{setMakingerr('');}
-    //if(e.target[5].value>100  || e.target[5].value<0 || e.target[5].value==''){error=1;setStoneerr('Offer on stone not more than 100%');}else{setStoneerr('');}
-    if(error == 0){
-      //setAddData({...addData,public_id:e.target.value});
-      let shop = {
-        name : e.target[1].value,
-        address : e.target[2].value,
-        public_id : e.target[0].value,
-        phone : e.target[3].value,
-        offermaking : e.target[4].value,
-        offerstone : e.target[5].value
-      };
-      let url = `${apiPath}addshop`;
-      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-      axios.post(url, shop, config).then((res)=>{
-        setAddData({name:'',address:'',phone:'',offermaking:'',offerstone:''});
-        setErr(res.data.message);
-        //Automatic Update Row
-        let newArray = shops.slice();
-        let obj = newArray.find((o, i) => {
-            if (o.public_id == res.data.results[0].public_id) {
-              newArray[i] = { payment_date:res.data.results[0].payment_date, offer_making: res.data.results[0].offer_making,offer_jwellary: res.data.results[0].offer_jwellary,phone: res.data.results[0].phone, name: res.data.results[0].name,address: res.data.results[0].address,public_id:res.data.results[0].public_id };
-              return true; // stop searching
-            }
+      if(addData.public_id==0){
+        url = `${apiPath}adduser`;
+        axios.post(url, user, config).then((res)=>{
+          let oldArray = users;
+          oldArray.unshift(res.data.results[0]);
+          setAddData({
+            public_id:0,
+            name:'',nameerr:'',
+            address:'',addresserr:'',
+            email:'',emailerr:'',
+            phone:'',phoneerr:'',
+            city:'',cityerr:'',
+            state:'',stateerr:'',
+            country:'',countryerr:'',
+            referby:'',referbyerr:'',
+            plan_id:'',planerr:'',planname:''});
+          setUsers([]);
+          setUsers(oldArray);
+          setShow(false);
+          toast.success(res.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }).catch((err)=>{
+          toast.error(err.response.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
         });
-        setShops(newArray);
-        setShow(false);
-        //Automatic Update Row
-      }).catch((err)=>{
-        setErr(err.response.data.message);
-      });
+      }else{
+        url = `${apiPath}edituser/${addData.public_id}`;
+        axios.patch(url, user, config).then((res)=>{
+          toast.success(res.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 9000,
+          });
+          let url = `${apiPath}users`;
+          config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+          axios.get(url, config).then((res)=>{
+            setUsers(res.data.results);
+            setAddData({
+              public_id:0,
+              name:'',nameerr:'',
+              address:'',addresserr:'',
+              email:'',emailerr:'',
+              phone:'',phoneerr:'',
+              city:'',cityerr:'',
+              state:'',stateerr:'',
+              country:'',countryerr:'',
+              referby:'',referbyerr:'',
+              plan_id:'',planerr:'',planname:''});
+          }).catch((err)=>{
+            toast.error(err.response.data.message, {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 3000,
+            });
+          });
+          setShow(false);
+        }).catch((err)=>{
+          toast.error(err.response.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        });
+      } 
     }
   }
-  let onEdit = (shop) => {
+  let onEdit = (user) => {
     setShow(true);
-    setShop(shop);
+    setAddData({
+      public_id:user.public_id,
+      name:user.fullname,
+      address:user.address,
+      email:user.email,
+      phone:user.phone,
+      city:user.city,
+      state:user.state,
+      country:user.country,
+      referby:'',
+      plan_id:user.plan_id,planname:user.planname,});
   }
-  let generateQRCode = (shop) => {
-    setGenerateQR('qr');
-    setShop(shop);
-  }
-  let changeList = (e) => {
-    let url = `${apiPath}shops/${e.target.value}`;
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    axios.get(url, config).then((res)=>{
-      setErr('');
-      setShops(res.data.results);
-    }).catch((err)=>{
-      setErr(err.response.data.message);
-      setShops([]);
-    });
-  }
-  let addPayment = (shop_data) => {
+  let changeStatus = (public_id) => {
     const confirmBox = window.confirm(
-      "Do you really want to make a payment?"
+      "Do you really want to extend plan ?"
     )
     if (confirmBox === true) {
-      let url = `${apiPath}addpayment/${shop_data.public_id}`;
-      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-      axios.patch(url, shop_data, config).then((res)=>{
-        setErr('Payment done');
-        let newArray = shops.slice();
-        newArray.find((o, i) => {
-            if (o.public_id == shop_data.public_id) {
-              newArray[i] = { payment_date:res.data.result.payment_date ,offer_making: shop_data.offer_making,offer_jwellary: shop_data.offer_jwellary,phone: shop_data.phone, name: shop_data.name,address: shop_data.address,public_id:shop_data.public_id };
-              return true; // stop searching
-            }
-        });
-        setShops(newArray);
-      }).catch((err)=>{
-        setErr(err.response.data.message);
-        //setShops([]);
-      });
+      // let url = `${apiPath}changeplan/${public_id}`;
+      // config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+      // axios.patch(url, public_id, config).then((res)=>{console.log(res);
+      //   setErr('Status succssfully changed.');
+      //   let newArray = plans.slice();
+      //   newArray.find((o, i) => {
+      //       if (o.public_id == public_id) {
+      //         newArray[i] = {
+      //           name:res.data.results.name, 
+      //           consultation: res.data.results.consultation,
+      //           onelinequestion: res.data.results.onelinequestion,
+      //           discountamount: res.data.results.discountamount, 
+      //           amount: res.data.results.amount,
+      //           status: res.data.results.status,
+      //           public_id:res.data.results.public_id };
+      //         return true; // stop searching
+      //       }
+      //   });
+      //   setPlans(newArray);
+      // }).catch((err)=>{console.log(err);
+      //   setErr(err.response.data.message);
+      // });
     }
   }
-  let unduPayment = (shop_data) => {
-    const confirmBox = window.confirm(
-      "Do you really want to remove a payment?"
-    )
-    if (confirmBox === true) {
-      let url = `${apiPath}undupayment/${shop_data.public_id}`;
-      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-      axios.patch(url, shop_data, config).then((res)=>{
-        setErr('Payment done');
-        let newArray = shops.slice();
-        newArray.find((o, i) => {
-            if (o.public_id == shop_data.public_id) {
-              newArray[i] = { payment_date:res.data.result.payment_date ,offer_making: shop_data.offer_making,offer_jwellary: shop_data.offer_jwellary,phone: shop_data.phone, name: shop_data.name,address: shop_data.address,public_id:shop_data.public_id };
-              return true; // stop searching
-            }
-        });
-        setShops(newArray);
-      }).catch((err)=>{
-        setErr(err.response.data.message);
-        //setShops([]);
-      });
-    }
+  let changeView = (user) => {
+    setView(true);
+    setUser(user);
   }
-  let correctdate= (tdate) => {
-    let odate = [new Date(tdate).getDate(),new Date(tdate).getMonth() + 1,  new Date(tdate).getFullYear()].join('/');
-    return odate;
+  let getformateddate = (tdate) => {
+    const today = new Date(tdate);
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    return dd + '/' + mm + '/' + yyyy;;
   }
-  let todaydate = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate();
   return (
     <Row>
-      <Modal show={generateQR === "qr"} backdrop="static" keyboard={false} >
+      <Modal show={view} backdrop="static" keyboard={false} size="lg">
         <Modal.Header>
-          {shop.name}
+          User Details
         </Modal.Header>
         <Modal.Body>
-          <div style={{ background: 'white', padding: '16px' }}>
-            <QrCode public_id={shop.public_id} />
-          </div>
+          <UserView userdata={user}/>
         </Modal.Body>
         <Modal.Footer>
-          <Button color="danger" onClick={()=>{setGenerateQR('')}}>Close</Button>
+            <Button className="btn m-2" color="danger" onClick={()=>{setView(false)}}>Close</Button>
         </Modal.Footer>
       </Modal>
       <Modal show={show} backdrop="static" keyboard={false} >
         <Modal.Header>
-          Enter Details
+          Enter Detailscsc
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={editsave}>
-            <input type="hidden" name="public_id" defaultValue={shop.public_id} />
+          {(err != '')?<Alert color="danger">{err}</Alert>:null}
+          <Form onSubmit={addUser}>
+            <input type="hidden" name="public_id" defaultValue={user.public_id} />
             <FormGroup>
-              <Input name="name" placeholder="Shop Name" defaultValue={shop.name} type="text" onChange={changeName} /><small className="text-danger">{nameerr}</small>
+              <Input name="name" placeholder="Full Name" defaultValue={addData.name} type="text" onChange={(e)=>{e.target.value.trim()!==''?setAddData({...addData,name:e.target.value,nameerr:''}):setAddData({...addData,name:'',nameerr:'Full name is required.'})}} /><small className="text-danger">{addData.nameerr}</small>
             </FormGroup>
             <FormGroup>
-              <Input name="address" placeholder="Shop Address" defaultValue={shop.address} type="text" onChange={changeAddress} /><small className="text-danger">{addresserr}</small>
+              <Input name="phone" placeholder="Phone Number" type="text" maxLength={10}  defaultValue={addData.phone}  onChange={(e)=>{e.target.value>0?setAddData({...addData,phone:e.target.value,phoneerr:''}):setAddData({...addData,phone:'',phoneerr:'Phone number is required or invalid'})}} /><small className="text-danger">{addData.phoneerr}</small>
             </FormGroup>
             <FormGroup>
-            <Input defaultValue={shop.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small>
-            </FormGroup>
-            {/* <FormGroup>
-            <Input defaultValue={0} disabled={true} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small>
+              <Input defaultValue={addData.email} name="email" placeholder="email" type="email" onChange={(e)=>{(RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(e.target.value.trim()))?setAddData({...addData,email:'',email:e.target.value,emailerr:''}):setAddData({...addData,emailerr:'Email format is wrong.'})}} /><small className="text-danger">{addData.emailerr}</small>
             </FormGroup>
             <FormGroup>
-            <Input defaultValue={0}  disabled={true} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small>
-            </FormGroup> */}
-            <Button className="btn" color="light-danger" type="submit">Update</Button>
+              <Input name="address" placeholder="Address" defaultValue={addData.address} type="text" onChange={(e)=>{e.target.value.trim()!==''?setAddData({...addData,address:e.target.value,addresserr:''}):setAddData({...addData,address:'',addresserr:'Address is required.'})}} /><small className="text-danger">{addData.addresserr}</small>
+            </FormGroup>
+            <FormGroup>
+              <Input defaultValue={addData.city} name="city" placeholder="Enter city" type="text" onChange={(e)=>{e.target.value.trim()!==''?setAddData({...addData,city:e.target.value,cityerr:''}):setAddData({...addData,city:'',cityerr:'Please enter city.'})}} /><small className="text-danger">{addData.cityerr}</small>
+            </FormGroup>
+            <FormGroup>
+              <Input defaultValue={addData.state} name="state" placeholder="Enter State" type="text" onChange={(e)=>{e.target.value.trim()!==''?setAddData({...addData,state:e.target.value,stateerr:''}):setAddData({...addData,state:'',stateerr:'Please enter state.'})}} /><small className="text-danger">{addData.stateerr}</small>
+            </FormGroup>
+            <FormGroup>
+              <Input defaultValue={addData.country} name="country" placeholder="Enter country" type="text" onChange={(e)=>{e.target.value.trim()!==''?setAddData({...addData,country:e.target.value,countryerr:''}):setAddData({...addData,country:'',countryerr:'Please enter country.'})}} /><small className="text-danger">{addData.countryerr}</small>
+            </FormGroup>
+            <FormGroup>
+              <Input onChange={(e)=>{e.target.value>0?setAddData({...addData,plan_id:e.target.value,planerr:''}):setAddData({...addData,plan_id:'',planerr:'Please select plan.'})}}  name="plan" type="select">
+                  <option value="0" selected={true} disabled>Select Plan</option>
+                  {
+                      plans.map((plan) => {
+                          return(
+                            <>
+                              <option key={plan.public_id} selected={addData.plan_id == plan.public_id} value={plan.public_id}>{plan.name}</option>
+                            </>
+                          )
+                      })
+                  }
+              </Input><small className="text-danger">{addData.planerr}</small>
+            </FormGroup>
+            <Button className="btn" color="light-danger" type="submit" >Save</Button>
             <Button className="btn m-2" color="danger" onClick={()=>{setShow(false)}}>Close</Button>
           </Form>
         </Modal.Body>
@@ -240,46 +267,25 @@ const Shops = () => {
       <Col lg="12">
         <Card>
           <CardTitle tag="h6" className="border-bottom p-3 mb-0">
-            Shops List
+            User List
           </CardTitle>
           <CardBody className="">
             {(err != '')?<Alert color="danger">{err}</Alert>:null}
-            <Form onSubmit={save}>
-              <input type="hidden" name="public_id" defaultValue={0} />
-              <Row className='p-4'>
-                <Col>
-                  <div><Input  value={addData.name} name="name" placeholder="Shop Name" type="text" onChange={changeName} /><small className="text-danger">{nameerr}</small></div>
-                </Col>
-                <Col>
-                  <div><Input value={addData.address} name="address" placeholder="Shop Address" type="text" onChange={changeAddress} /><small className="text-danger">{addresserr}</small></div>
-                </Col>
-              </Row>
-              <Row className='p-4'>
-                {/* <Col>
-                  <div><Input value={0} disabled={true} name="offermaking" type="number" placeholder="Offer on making charge (%)" onChange={changeOffermaking}/><small className="text-danger">{makingerr}</small></div>
-                </Col>
-                <Col>
-                  <div><Input value={0} disabled={true} name="offerstone" type="number" placeholder="Offer on stone charge (%)" onChange={changeOfferstone} /><small className="text-danger">{stoneerr}</small></div>
-                </Col> */}
-                <Col>
-                  <div><Input value={addData.phone} name="phone" placeholder="Shop Phone" maxLength="10" type="text" onChange={changePhone} /><small className="text-danger">{phoneerr}</small></div>
-                </Col>
-                <Col>
-                  <div><Input checked={addData.payment} name="payment" defaultValue="1" type="checkbox" onClick={changePayment} /> <Label check>Payment</Label>&nbsp;&nbsp;<Button className="btn" color="light-danger" type="submit">Add</Button></div>
-                </Col>
-              </Row>
-            </Form>
-            <Row className='p-4'>
+            <Row>
               <Col>
                 <FormGroup>
-                  <Input onChange={changeList} name="country" type="select">
-                      <option value='0'>All</option>
-                      <option value='1'>Active</option>
-                      <option value='2'>last month of subscription</option>
-                      <option value='3'>Inactive</option>
-                  </Input>
+                <Button className="btn" color="light-danger" onClick={()=>setShow(true)}>Add</Button>
                 </FormGroup>
               </Col>
+              <Col></Col>
+            </Row>
+            <Row>
+              <Col>
+                <FormGroup>
+                  <Input name="search" placeholder="Enter name or Mobile Number" defaultValue={search} type="text" onChange={(e)=>{setSearch(e.target.value)}} />
+                </FormGroup>
+              </Col>
+              <Col></Col>
               <Col></Col>
             </Row>
             <Table bordered responsive>
@@ -287,33 +293,40 @@ const Shops = () => {
                 <tr>
                   <th>#</th>
                   <th>Name</th>
-                  <th>Address</th>
                   <th>Phone</th>
-                  {/* <th>Offer On Making</th>
-                  <th>Offer On Stone</th> */}
-                  <th>subcripion end date</th>
-                  <th>Add Payment</th>
-                  <th>Undo Payment</th>
-                  <th>QR</th>
+                  <th>City</th>
+                  <th>Plan</th>
+                  <th>Expire Date</th>
+                  {/* <th>Plan Extend</th> */}
+                  <th>View</th>
                   <th>Edit</th>
                 </tr>
               </thead>
               <tbody>
-              {
-                shops.map((shop,index) => {
+              {users.length === 0?
+                <tr>
+                      <td colSpan={7}>No user found.</td>
+                </tr>:
+                users.filter((user) => {
+                  if (search === "") {
+                    return user
+                  } else if ((user.fullname || '').toLowerCase().includes((search || '').toLowerCase())||
+                  user.phone.toString().includes(search))
+                  {
+                    return user
+                  }
+                }).map((user,index) => {
                   return (
                     <tr key={index}>
-                      <th>{index+1}</th>
-                      <th>{shop.name}</th>
-                      <th>{shop.address}</th>
-                      <th>{shop.phone}</th>
-                      {/* <th>{shop.offer_making}</th>
-                      <th>{shop.offer_jwellary}</th> */}
-                      <th>{correctdate(shop.payment_date)}</th>
-                      <th><Button className="btn" color="light-danger" onClick={() => addPayment(shop)}>Add Payment</Button></th>
-                      <th>{new Date(shop.payment_date) >= new Date(todaydate)?<Button className="btn" color="light-danger" onClick={() => unduPayment(shop)}>Undo Payment</Button>:null}</th>
-                      <th><Button className="btn" color="light-danger" onClick={() => generateQRCode(shop)}>Genrate</Button></th>
-                      <th><Button className="btn" color="light-danger" onClick={() => onEdit(shop)}>Edit</Button></th>
+                      <td>{index+1}</td>
+                      <td>{user.fullname}</td>
+                      <td>{user.phone}</td>
+                      <td>{user.city}</td>
+                      <td>{user.planname}</td>
+                      <td>{getformateddate(user.plan_expire_date)}</td>
+                      {/* <td><Button className="btn" color="light-danger" onClick={() => changeStatus(user.public_id)}>Click here</Button></td> */}
+                      <td><Button className="btn" color="light-danger" onClick={() => changeView(user)}>View</Button></td>
+                      <td><Button className="btn" color="light-danger" onClick={()=>onEdit(user)}>Edit</Button></td>
                     </tr>
                   )
                 })
@@ -323,8 +336,9 @@ const Shops = () => {
           </CardBody>
         </Card>
       </Col>
+      <ToastContainer />
     </Row>
   );
 };
 
-export default Shops;
+export default Users;

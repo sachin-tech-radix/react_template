@@ -6,12 +6,12 @@ import { useNavigate } from 'react-router-dom';
 const navigation = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/gem",
     icon: "bi bi-speedometer2",
   },
   {
     title: "Shops",
-    href: "/shops",
+    href: "/gems/shops",
     icon: "bi bi-textarea-resize",
   },
   // {
@@ -21,7 +21,7 @@ const navigation = [
   // },
   {
     title: "Orders",
-    href: "/orders",
+    href: "/gems/orders",
     icon: "bi bi-layout-split",
   }
 ];

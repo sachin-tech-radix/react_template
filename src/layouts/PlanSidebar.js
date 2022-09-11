@@ -6,17 +6,17 @@ import { useNavigate } from 'react-router-dom';
 const navigation = [
   {
     title: "PlanDashboard",
-    href: "/plandashboard",
+    href: "/plan",
     icon: "bi bi-speedometer2",
   },
   {
     title: "Plans",
-    href: "/plans",
+    href: "/plan/plans",
     icon: "bi bi-textarea-resize",
   },
   {
     title: "Users",
-    href: "/users",
+    href: "/plan/users",
     icon: "bi bi-layout-split",
   }
 ];

@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import { templatePath } from "../../Constants";
 
-const QrCode = (props) => {console.log(props.public_id);
-  const [url, setUrl] = useState(templatePath+props.public_id);
+const QrCode = (props) => {
+  const [url, setUrl] = useState(templatePath+'user/'+props.public_id);
 
   const qrRef = useRef();
 

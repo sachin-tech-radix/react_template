@@ -5,7 +5,7 @@ import { apiPath, config } from "../../Constants";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({auth}) => {
   const navigate = useNavigate();
   let [loginData, setLoginData] = useState({username:'',password:''});
   let [unameError ,setUnameError] = useState(null);
@@ -32,9 +32,11 @@ const Login = () => {
         localStorage.setItem('type', res.data.result.type);
         localStorage.setItem('token', res.data.access_token);
         if(res.data.result.type == 1){
-          navigate("/dashboard");
+          auth(true);
+          navigate("gems");
         }else{
-          navigate("/plandashboard");
+          auth(null);
+          navigate("plan");
         }
       }).catch((err)=>{//console.log(err);
         setError(err.response.data.message);
