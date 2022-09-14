@@ -19,10 +19,10 @@ const UserView = (user) => {
     let url = `${apiPath}userplans/${user.userdata.id}`;
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     axios.get(url, config).then((res)=>{
-      setAppointments(res.data.results[1]);
-      setCurrentPlan({...plan,consultancy:res.data.results[0][0].app_type_count,onelineque:res.data.results[0][1].app_type_count});
+      setAppointments(res.data.results.appointments);
+      setCurrentPlan({...currentPlan,consultancy:res.data.results.consultancy,onelineque:res.data.results.olq});
     }).catch((err)=>{
-      setAppointments(err.response.data.results);
+      setAppointments([]);
     });
   },[load])
   useEffect(()=>{
@@ -64,7 +64,7 @@ const UserView = (user) => {
           autoClose: 3000,
         });
         setAddAppointment(false);
-        setLoad(1);
+        Number(load)===1?setLoad(0):setLoad(1)
       }).catch((err)=>{
         toast.error(err.response.data.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -73,12 +73,14 @@ const UserView = (user) => {
       });
     }
   }
+  let todayDate = new Date().toISOString().slice(0, 10);
+  //console.log(todayDate);
   return (
     <div>
       <Modal show={addAppointment} backdrop="static" keyboard={false}>
         <Form onSubmit={addApp}>
         <Modal.Header>
-          User Details{JSON.stringify(addData)}
+          User Details
         </Modal.Header>
         <Modal.Body>
             <FormGroup>
@@ -101,20 +103,20 @@ const UserView = (user) => {
         </Form>
       </Modal>
       <Row>
-        <h4><Badge color="secondary">{plan.planname} </Badge> plan with <Badge>{plan.consultancy}</Badge> consultancy and <Badge>{plan.onelineque}</Badge> one line question</h4>
-        <h4>Reamaining consultancy <Badge color="secondary">{Number(plan.consultancy)-Number(currentPlan.consultancy)}</Badge> 
-        {Number(plan.onelineque)>0 &&
+        <h5><Badge color="secondary">{plan.planname} </Badge> plan with <Badge>{plan.consultancy}</Badge> consultancy and <Badge>{plan.onelineque}</Badge> one line question</h5>
+        <h5>Reamaining consultancy <Badge color="secondary">{Number(plan.consultancy)-Number(currentPlan.consultancy)}</Badge> 
+        {Number(plan.consultancy)-Number(currentPlan.consultancy) >0 &&
           <>
             &nbsp;&nbsp;&nbsp;<Button className="btn" color="light-danger" value='1' onClick={()=>{setAddData({...addData,appointmenttype:1,type:1});setAddAppointment(true)}}>Add Consultancy</Button>
           </>
         }
-        </h4>
-        <h4>Reamaining One line Question <Badge color="secondary">{Number(plan.onelineque)-Number(currentPlan.onelineque)}</Badge>
-        {Number(plan.onelineque)>0 &&
+        </h5>
+        <h5>Reamaining One line Question <Badge color="secondary">{Number(plan.onelineque)-Number(currentPlan.onelineque)}</Badge>
+        {Number(plan.onelineque)-Number(currentPlan.onelineque)>0 && user.userdata.plan_expire_date >=  todayDate &&
           <>
             &nbsp;&nbsp;&nbsp;<Button className="btn" color="light-danger" value='2' onClick={()=>{setAddData({...addData,appointmenttype:2,type:1});setAddAppointment(true)}}>Add One Line Question</Button></>
         }
-        </h4>
+        </h5>
       </Row>
       <Row>
         <Col md="6" lg="6" sm="12">
@@ -136,6 +138,10 @@ const UserView = (user) => {
                 <tr>
                   <td align="right">State:</td>
                   <td align="left">{user.userdata.state}</td>
+                </tr>
+                <tr>
+                  <td align="right">Birth Details:</td>
+                  <td align="left">{`${getformateddate(user.userdata.dob)} ${user.userdata.tob}`}</td>
                 </tr>
               </tbody>
             </Table>
@@ -161,6 +167,10 @@ const UserView = (user) => {
                   <td align="right">Country:</td>
                   <td align="left">{user.userdata.country}</td>
                 </tr>
+                <tr>
+                  <td align="right">Place Of Birth:</td>
+                  <td align="left">{user.userdata.pob}</td>
+                </tr>
               </tbody>
             </Table>
           </Card>
@@ -178,11 +188,11 @@ const UserView = (user) => {
         <tbody>
         {appointments.length === 0?
           <tr>
-                <td colSpan={4}>No user found.</td>
+                <td colSpan={4}>No appointment found.</td>
           </tr>:
           appointments.map((appointments,index) => {
             return (
-              <tr key={index}>
+              <tr key={index+1}>
                 <td>{index+1}</td>
                 <td>{(appointments.fuser_name === null?"Self":appointments.fuser_name)}</td>
                 <td>{appointments.appointment_type === 1?"Consultancy":"One Line Question"}</td>

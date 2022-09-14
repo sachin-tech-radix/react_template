@@ -29,6 +29,7 @@ const Header = () => {
         <NavbarBrand href="/">
           <img src={logoMobile} width='35' height='35' alt="user" className="d-lg-none" />
         </NavbarBrand>
+        <Button color="light-danger" className=" d-lg-none" onClick={() => showMobilemenu()}><i className="bi bi-list"></i></Button>
       </div>
 
       {/* <Collapse navbar isOpen={isOpen}>

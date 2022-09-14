@@ -1,4 +1,5 @@
 import { Row, Col, Card, CardTitle, CardBody } from "reactstrap";
+import { templatePath } from "../../Constants";
 
 const Terms = () => {
   return (
@@ -18,11 +19,26 @@ const Terms = () => {
               <h1>Terms & Conditions</h1>
               <p>Welcome to Cosmos Vedic World!</p>
 
-<p>These terms and conditions outline the rules and regulations for the use of Cosmos Vedic World's Website, located at https://gems.radixforce.com/.</p>
+<p>These terms and conditions outline the rules and regulations for the use of Cosmos Vedic World's Website, located at {templatePath}.</p>
 
 <p>By accessing this website we assume you accept these terms and conditions. Do not continue to use Cosmos Vedic World if you do not agree to take all of the terms and conditions stated on this page.</p>
 
 <p>The following terminology applies to these Terms and Conditions, Privacy Statement and Disclaimer Notice and all Agreements: "Client", "You" and "Your" refers to you, the person log on this website and compliant to the Company’s terms and conditions. "The Company", "Ourselves", "We", "Our" and "Us", refers to our Company. "Party", "Parties", or "Us", refers to both the Client and ourselves. All terms refer to the offer, acceptance and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client’s needs in respect of provision of the Company’s stated services, in accordance with and subject to, prevailing law of Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization and/or he/she or they, are taken as interchangeable and therefore as referring to same.</p>
+
+<h3><strong>DESCRIPTION OF Cosmos Vedic World </strong></h3>
+
+<p>We offer information on gems and recommend the stones that one should wear. Due to the fact that each gemstone has a special meaning for each zodiac sign, prevention and healing through gemstones have taken center stage in astrology. The benefits of using gemstones are plentiful in personal life, career, marriage, health, and business. Gemstones have the power to protect you from the negative energy of the planets. According to astrological recommendations, a gemstone should only be worn after receiving treatment or doing pooja.</p>
+
+<h3><strong>REFUND & CANCELLATION POLICY</strong></h3>
+
+<ul>
+    <li>Refund will be considered only if customer send whatsup message on +91-8989888990 within 2 days of payment. No refund shall be entertained after expiry of two dayss from the time of payment.</li>
+    <li>No refund shall be made if data provided by customer is incorrect. However, if customer mail us within an hour of ordering the stone suggestion report, we will consider the changes to be made.</li>
+    <li>Once the report is delivered to customer, no refund shall be made.</li>
+    <li>All eligible refunds shall be made within seven business days from the date of receipt of request. However, the same is subject to transaction and processing time taken by bank/payment gateway.</li>
+    <li>In case of double payment made by mistake against the single order, one payment will be refunded.</li>
+    <li>All refunds will be made after deducting the transaction charges levied by the bank and / or the payment gateway, or any other charges that may have been borne by {templatePath} in processing and / or delivering the service, as applicable.</li>
+</ul>
 
 <h3><strong>Cookies</strong></h3>
 
@@ -122,19 +138,6 @@ const Terms = () => {
 <p>If you find any link on our Website that is offensive for any reason, you are free to contact and inform us any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.</p>
 
 <p>We do not ensure that the information on this website is correct, we do not warrant its completeness or accuracy; nor do we promise to ensure that the website remains available or that the material on the website is kept up to date.</p>
-
-
-<h3><strong>REFUND & CANCELLATION POLICY</strong></h3>
-
-<ul>
-    <li>Refund will be considered only if customer send whatsup message on +91-8989888990 within 2 days of payment. No refund shall be entertained after expiry of two dayss from the time of payment.</li>
-    <li>No refund shall be made if data provided by customer is incorrect. However, if customer mail us within an hour of ordering the stone suggestion report, we will consider the changes to be made.</li>
-    <li>Once the report is delivered to customer, no refund shall be made.</li>
-    <li>All eligible refunds shall be made within seven business days from the date of receipt of request. However, the same is subject to transaction and processing time taken by bank/payment gateway.</li>
-    <li>In case of double payment made by mistake against the single order, one payment will be refunded.</li>
-    <li>All refunds will be made after deducting the transaction charges levied by the bank and / or the payment gateway, or any other charges that may have been borne by gems.radixforce.com in processing and / or delivering the service, as applicable.</li>
-</ul>
-
 
 <h3><strong>Disclaimer</strong></h3>
 

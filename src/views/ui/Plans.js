@@ -184,8 +184,8 @@ const Plans = () => {
                   <th>Name</th>
                   <th>Consultancy</th>
                   <th>One Line</th>
-                  <th>Amount</th>
                   <th>Real Amount</th>
+                  <th>Discounted Amount</th>
                   {/* <th>Status</th> */}
                   <th>Edit</th>
                 </tr>

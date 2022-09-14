@@ -6,6 +6,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import { AutoComplete } from 'primereact/autocomplete';
 
 const Users = () => {
   let [search, setSearch] = useState(null);
@@ -26,7 +27,11 @@ const Users = () => {
     state:'',stateerr:'',
     country:'',countryerr:'',
     referby:'',referbyerr:'',
-    plan_id:'',planerr:'',planname:'',});
+    plan_id:'',planerr:'',planname:'',
+    dob:'',
+    pob:'',
+    tob:'',
+  });
     useEffect(()=>{
       let url = `${apiPath}users`;
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
@@ -56,7 +61,15 @@ const Users = () => {
     let error = {status:0,name:'',address:'',email:'',phone:'',city:'',state:'',country:'',plan:''};
     if(addData.name == ''){error.name = 'Name is required.';error.status=1}else{error.name = ''}
     if(addData.phone<=0 || addData.phone == ''){error.phone = 'Please enter phone number.';error.status=1}else{error.phone = ''}
-    if(addData.email<=0 || addData.email == ''){error.email = 'Please enter email.';error.status=1}else{error.email = ''}
+    if(addData.email !== ''){
+      if(!RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(addData.email)){
+        error.email = 'Please enter email.';error.status=1
+      }else{
+        error.email = ''
+      }
+    }else{
+      error.email = ''
+    }
     if(addData.address<=0 || addData.address == ''){error.address = 'Please enter address.';error.status=1}else{error.address = ''}
     if(addData.city<=0 || addData.city == ''){error.city = 'Please enter city.';error.status=1}else{error.city = ''}
     if(addData.state<=0 || addData.state == ''){error.state = 'Please enter state.';error.status=1}else{error.state = ''}
@@ -73,7 +86,8 @@ const Users = () => {
         city : addData.city,
         state : addData.state,
         country : addData.country,
-        plan_id : addData.plan_id
+        plan_id : addData.plan_id,
+        dob:addData.dob,pob:addData.pob,tob:addData.tob
       };
       config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
       if(addData.public_id==0){
@@ -91,7 +105,8 @@ const Users = () => {
             state:'',stateerr:'',
             country:'',countryerr:'',
             referby:'',referbyerr:'',
-            plan_id:'',planerr:'',planname:''});
+            plan_id:'',planerr:'',planname:'',
+            dob:'',pob:'',tob:''});
           setUsers([]);
           setUsers(oldArray);
           setShow(false);
@@ -105,7 +120,7 @@ const Users = () => {
             autoClose: 3000,
           });
         });
-      }else{
+      }else{console.log(user);
         url = `${apiPath}edituser/${addData.public_id}`;
         axios.patch(url, user, config).then((res)=>{
           toast.success(res.data.message, {
@@ -126,7 +141,8 @@ const Users = () => {
               state:'',stateerr:'',
               country:'',countryerr:'',
               referby:'',referbyerr:'',
-              plan_id:'',planerr:'',planname:''});
+              plan_id:'',planerr:'',planname:'',
+              dob:'',pob:'',tob:''});
           }).catch((err)=>{
             toast.error(err.response.data.message, {
               position: toast.POSITION.TOP_RIGHT,
@@ -155,7 +171,9 @@ const Users = () => {
       state:user.state,
       country:user.country,
       referby:'',
-      plan_id:user.plan_id,planname:user.planname,});
+      plan_id:user.plan_id,planname:user.planname,
+      dob:user.dob,pob:user.pob,tob:user.tob
+    });
   }
   let changeStatus = (public_id) => {
     const confirmBox = window.confirm(
@@ -216,7 +234,7 @@ const Users = () => {
       </Modal>
       <Modal show={show} backdrop="static" keyboard={false} >
         <Modal.Header>
-          Enter Detailscsc
+          Enter Detail
         </Modal.Header>
         <Modal.Body>
           {(err != '')?<Alert color="danger">{err}</Alert>:null}
@@ -229,7 +247,12 @@ const Users = () => {
               <Input name="phone" placeholder="Phone Number" type="text" maxLength={10}  defaultValue={addData.phone}  onChange={(e)=>{e.target.value>0?setAddData({...addData,phone:e.target.value,phoneerr:''}):setAddData({...addData,phone:'',phoneerr:'Phone number is required or invalid'})}} /><small className="text-danger">{addData.phoneerr}</small>
             </FormGroup>
             <FormGroup>
-              <Input defaultValue={addData.email} name="email" placeholder="email" type="email" onChange={(e)=>{(RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(e.target.value.trim()))?setAddData({...addData,email:'',email:e.target.value,emailerr:''}):setAddData({...addData,emailerr:'Email format is wrong.'})}} /><small className="text-danger">{addData.emailerr}</small>
+              <Input defaultValue={addData.email} name="email" placeholder="email" type="email" 
+                onChange={(e)=>{
+                  (RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(e.target.value.trim()))?
+                    setAddData({...addData,email:'',email:e.target.value,emailerr:''}):(e.target.value.trim() !== '')?
+                    setAddData({...addData,emailerr:'Email format is wrong.'}):setAddData({...addData,email:e.target.value,emailerr:''})}} />
+              <small className="text-danger">{addData.emailerr}</small>
             </FormGroup>
             <FormGroup>
               <Input name="address" placeholder="Address" defaultValue={addData.address} type="text" onChange={(e)=>{e.target.value.trim()!==''?setAddData({...addData,address:e.target.value,addresserr:''}):setAddData({...addData,address:'',addresserr:'Address is required.'})}} /><small className="text-danger">{addData.addresserr}</small>
@@ -256,6 +279,15 @@ const Users = () => {
                       })
                   }
               </Input><small className="text-danger">{addData.planerr}</small>
+            </FormGroup>
+            <FormGroup>
+              <Input  name="dob" defaultValue={addData.dob} placeholder="Date Of Birth" type="date" onChange={(e)=>{setAddData({...addData,dob:e.target.value})}} />
+            </FormGroup>
+            <FormGroup>
+              <Input  name="tob" defaultValue={addData.tob} placeholder="Time Of Birth" type="time" onChange={(e)=>{setAddData({...addData,tob:e.target.value})}} />
+            </FormGroup>
+            <FormGroup>
+            <Input  name="pob" defaultValue={addData.pob} placeholder="Place Of Birth" type="text" onChange={(e)=>{setAddData({...addData,pob:e.target.value})}} />
             </FormGroup>
             <Button className="btn" color="light-danger" type="submit" >Save</Button>
             <Button className="btn m-2" color="danger" onClick={()=>{setShow(false)}}>Close</Button>

@@ -1,4 +1,5 @@
 import {Row, Col, Card, CardTitle, CardBody} from "reactstrap";
+import { templatePath } from "../../Constants";
 
 const Privacy = () => {
   return (
@@ -18,7 +19,7 @@ const Privacy = () => {
 
               <h1>Privacy Policy</h1>
 
-              <p>At Cosmos Vedic World, accessible from https://gems.radixforce.com/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Cosmos Vedic World and how we use it.</p>
+              <p>At Cosmos Vedic World, accessible from {templatePath}, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Cosmos Vedic World and how we use it.</p>
 
               <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.</p>
 

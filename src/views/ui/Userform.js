@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import { BiRupee } from "react-icons/bi";
 import { Alert, Card, Row, Col, CardTitle, CardBody, Button, Form, FormGroup, Label, Input } from "reactstrap";
-import { apiPath, config, amount } from "../../Constants";
+import { templatePath,apiPath, config, amount } from "../../Constants";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
@@ -144,7 +144,7 @@ const Forms = () => {
         name: "Cosmos Vedic World",
         description: "Thanks for purchasing",
         image:
-            "http://localhost:3001/static/media/logo.c472494e.png",
+            `${templatePath}/static/media/logo.c472494e.png`,
     
         handler: function (response) {
             //alert(response.razorpay_payment_id);
@@ -178,8 +178,12 @@ const Forms = () => {
     let url = `${apiPath}shop/${shopid}`;
     axios.get(url, config).then((res)=>{
       setShop(res.data.result);
-    }).catch((err)=>{
-      setErr(err.response.data.message);
+    }).catch((err)=>{console.log(err.message);
+      if(err.message === 'Network Error'){
+        setErr(err.message);
+      }else{
+        setErr(err.response.data.message);
+      }
     });
   },[])
   //Suggestions for Place of birth

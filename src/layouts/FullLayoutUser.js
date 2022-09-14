@@ -1,36 +1,39 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Outlet, Link, useLocation, useParams } from "react-router-dom";
 import { Container, Button, Nav, NavItem } from "reactstrap";
 import HeaderOpen from "./HeaderOpen";
 
-const navigation = [
-  {
-    title: "Privacy Policy",
-    href: "/privacy",
-    icon: "bi bi-speedometer2",
-  },
-  {
-    title: "Terms & Conditions",
-    href: "/terms",
-    icon: "bi bi-textarea-resize",
-  },
-  // {
-  //   title: "Users",
-  //   href: "/plan/users",
-  //   icon: "bi bi-layout-split",
-  // }
-];
-
 const FullLayout = () => {
+  let { shopid } = useParams();
+  let [shopID,setShopID] = useState(shopid);
+  const navigation = [
+    {
+      title: "Privacy Policy",
+      href: "/privacy",
+      icon: "bi bi-speedometer2",
+    },
+    {
+      title: "Terms & Conditions",
+      href: "/terms",
+      icon: "bi bi-textarea-resize",
+    },
+    {
+      title: "Gems Link",
+      href: `/user/${shopID}`,
+      icon: "bi bi-layout-split",
+    }
+  ];
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
-  let location = useLocation();
+  let location = useLocation();console.log(location);
   return (
     <main>
       {/********header**********/}
       <HeaderOpen />
       <div className="pageWrapper d-lg-flex">
         {/********Sidebar**********/}
+        {location.pathname === "/" || location.pathname === "/login"?null:
         <aside className="sidebarArea shadow bg-light-danger" id="sidebarArea">
           <div className="bg-light-danger">
             <div className="d-flex">
@@ -62,7 +65,7 @@ const FullLayout = () => {
               </Nav>
             </div>
           </div>
-        </aside>
+        </aside>}
         {/********Content Area**********/}
         <div className="contentArea">
           {/********Middle Content**********/}
