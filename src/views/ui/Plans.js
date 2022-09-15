@@ -156,7 +156,10 @@ const Plans = () => {
               <Input defaultValue={addData.discountamount} name="discountamount" placeholder="Real Amount" type="number" onChange={(e)=>{e.target.value>0?setAddData({...addData,discountamount:e.target.value,discountamounterr:''}):setAddData({...addData,discountamount:'',discountamounterr:'Please enter numeric value.'})}} /><small className="text-danger">{addData.discountamounterr}</small>
             </FormGroup>
             <Button className="btn" color="light-danger" type="submit" >Save</Button>
-            <Button className="btn m-2" color="danger" onClick={()=>{setShow(false)}}>Close</Button>
+            <Button className="btn m-2" color="danger" onClick={()=>{
+              setAddData({...addData,public_id:0,name:'',nameerr:'',consultation:'',consultationerr:'',onelinequestion:'',onelinequestionerr:'',amount:'',amounterr:'',discountamount:'',discountamounterr:''});
+              setShow(false)}
+            }>Close</Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>

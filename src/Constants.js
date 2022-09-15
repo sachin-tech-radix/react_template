@@ -1,4 +1,4 @@
-export const apiPath = "http://127.0.0.1:8000/api/";
+export const apiPath = "http://192.168.1.24/api/";
 //export const apiPath = "https://gems.radixforce.com/api/api/";
 export const templatePath = "http://localhost:3000/";
 //export const templatePath = "https://gems.radixforce.com/";

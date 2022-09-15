@@ -12,8 +12,8 @@ const navigation = [
     icon: "bi bi-speedometer2",
   },
   {
-    title: "Shops",
-    href: "/gems/shops",
+    title: "Sales Team",
+    href: "/gems/sales",
     icon: "bi bi-textarea-resize",
   },
   // {

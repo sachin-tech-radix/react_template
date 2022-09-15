@@ -40,7 +40,7 @@ const App = () => {
         <Route path="*" element={<Navigate to='/'/>} /></>}
       {user === true && 
         <><Route path="/gems" element={<FullLayout logoutuser={()=>setUser(false)} />}>
-          <Route path="/gems/shops" element={<Shops />} />
+          <Route path="/gems/sales" element={<Shops />} />
           <Route path="/gems" element={<Dashboard />} />
           <Route path="/gems/orders" element={<Orders />} />
         </Route>

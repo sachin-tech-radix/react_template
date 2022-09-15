@@ -1,0 +1,51 @@
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  background: #EBEBEB !important;
+box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) !important;
+}
+.mobile_logo{
+    display: none;
+}
+
+.navbar-light .navbar-nav .nav-link:hover, .navbar-light .navbar-nav .nav-link:focus {
+    border-radius: 10px;
+    color: white;
+    background: black;
+    padding: 12px;
+}
+.form-check-input:checked {
+    background-color: #DBA7BD;
+    border-color:#DBA7BD;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding:10px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #1e2a35;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 1.3rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.p-fluid .p-inputtext {
+    width: 100%;
+    border-radius: 1.3rem;
+    padding: 10px;
+}
+
+@media only screen and (max-width: 991px){
+
+    .mobile_logo{
+    display: block;
+}}

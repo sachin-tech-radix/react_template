@@ -61,7 +61,7 @@ const Users = () => {
     let error = {status:0,name:'',address:'',email:'',phone:'',city:'',state:'',country:'',plan:''};
     if(addData.name == ''){error.name = 'Name is required.';error.status=1}else{error.name = ''}
     if(addData.phone<=0 || addData.phone == ''){error.phone = 'Please enter phone number.';error.status=1}else{error.phone = ''}
-    if(addData.email !== ''){
+    if(addData.email !== '' && addData.email !== null){
       if(!RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(addData.email)){
         error.email = 'Please enter email.';error.status=1
       }else{
@@ -234,7 +234,7 @@ const Users = () => {
       </Modal>
       <Modal show={show} backdrop="static" keyboard={false} >
         <Modal.Header>
-          Enter Detail
+          Enter Details
         </Modal.Header>
         <Modal.Body>
           {(err != '')?<Alert color="danger">{err}</Alert>:null}
@@ -290,7 +290,22 @@ const Users = () => {
             <Input  name="pob" defaultValue={addData.pob} placeholder="Place Of Birth" type="text" onChange={(e)=>{setAddData({...addData,pob:e.target.value})}} />
             </FormGroup>
             <Button className="btn" color="light-danger" type="submit" >Save</Button>
-            <Button className="btn m-2" color="danger" onClick={()=>{setShow(false)}}>Close</Button>
+            <Button className="btn m-2" color="danger" onClick={()=>{
+              {
+          setAddData({...addData,
+            public_id:0,
+            name:'',nameerr:'',
+            address:'',addresserr:'',
+            email:'',emailerr:'',
+            phone:'',phoneerr:'',
+            city:'',cityerr:'',
+            state:'',stateerr:'',
+            country:'',countryerr:'',
+            referby:'',referbyerr:'',
+            plan_id:'',planerr:'',planname:'',
+            dob:'',pob:'',tob:''})
+        }
+              setShow(false)}}>Close</Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -306,7 +321,7 @@ const Users = () => {
             <Row>
               <Col>
                 <FormGroup>
-                <Button className="btn" color="light-danger" onClick={()=>setShow(true)}>Add</Button>
+                <Button className="btn" color="light-danger" onClick={()=>{setShow(true)}}>Add</Button>
                 </FormGroup>
               </Col>
               <Col></Col>
@@ -358,7 +373,7 @@ const Users = () => {
                       <td>{getformateddate(user.plan_expire_date)}</td>
                       {/* <td><Button className="btn" color="light-danger" onClick={() => changeStatus(user.public_id)}>Click here</Button></td> */}
                       <td><Button className="btn" color="light-danger" onClick={() => changeView(user)}>View</Button></td>
-                      <td><Button className="btn" color="light-danger" onClick={()=>onEdit(user)}>Edit</Button></td>
+                      <td><Button className="btn" color="light-danger" onClick={()=>{onEdit(user)}}>Edit</Button></td>
                     </tr>
                   )
                 })

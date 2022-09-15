@@ -84,7 +84,7 @@ const Login = ({auth}) => {
                   <FormGroup>
                     <Label for="exampleEmail">Username</Label>
                     <div className="input-group input-group">
-                      <span className="input-group-text" style={{color:'#f8dddd'}} id="basic-addon1"><FaUser></FaUser></span>
+                      <span className="input-group-text" style={{color:'#f8dddd',borderTopLeftRadius:"20px",borderBottomLeftRadius:"20px"}} id="basic-addon1"><FaUser></FaUser></span>
                       <input name="username" onChange={inputValue} placeholder="Username" className="form-control" aria-label="Username" aria-describedby="basic-addon1" />
                     </div>
                     <small id="passwordHelp" className="text-danger">{unameError}</small>
@@ -92,7 +92,7 @@ const Login = ({auth}) => {
                   <FormGroup>
                     <Label for="examplePassword">Password</Label>
                     <div className="input-group input-group">
-                      <span className="input-group-text" style={{color:'#f8dddd'}} id="basic-addon1"><FaLock></FaLock></span>
+                      <span className="input-group-text"  style={{color:'#f8dddd',borderTopLeftRadius:"20px",borderBottomLeftRadius:"20px"}} id="basic-addon1"><FaLock></FaLock></span>
                       <input name="password" onChange={inputValue} placeholder="Password" type="password" className="form-control" aria-label="Password" aria-describedby="basic-addon1" />
                     </div>
                     <small id="passwordHelp" className="text-danger">{passError}</small>

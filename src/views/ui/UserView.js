@@ -105,7 +105,7 @@ const UserView = (user) => {
       <Row>
         <h5><Badge color="secondary">{plan.planname} </Badge> plan with <Badge>{plan.consultancy}</Badge> consultancy and <Badge>{plan.onelineque}</Badge> one line question</h5>
         <h5>Reamaining consultancy <Badge color="secondary">{Number(plan.consultancy)-Number(currentPlan.consultancy)}</Badge> 
-        {Number(plan.consultancy)-Number(currentPlan.consultancy) >0 &&
+        {Number(plan.consultancy)-Number(currentPlan.consultancy) >0 && user.userdata.plan_expire_date >=  todayDate &&
           <>
             &nbsp;&nbsp;&nbsp;<Button className="btn" color="light-danger" value='1' onClick={()=>{setAddData({...addData,appointmenttype:1,type:1});setAddAppointment(true)}}>Add Consultancy</Button>
           </>
